@@ -20,7 +20,8 @@ jobs:
           sudo apt update
           sudo apt install -y zip unzip openjdk-8-jdk python3-pip build-essential git python3-setuptools python3-wheel libncurses5-dev
           pip install cython
-
+          yes | sdkmanager --licenses
+          
       - name: Install buildozer
         run: |
           pip install buildozer
