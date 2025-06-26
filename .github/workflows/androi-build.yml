@@ -1,4 +1,4 @@
-name: Build APK
+name: Build APK Musik Spy
 
 on:
   push:
@@ -8,42 +8,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y zip unzip openjdk-11-jdk python3-pip curl
+        pip install --upgrade pip
+        pip install cython buildozer==1.5.0
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y zip unzip openjdk-17-jdk python3-pip git wget curl libz-dev
-          pip install cython==0.29.36 buildozer
+    - name: Install Android command line tools
+      run: |
+        mkdir -p $HOME/android-sdk/cmdline-tools
+        cd $HOME/android-sdk/cmdline-tools
+        curl -O https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip -q commandlinetools-linux-9477386_latest.zip -d latest
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          "platform-tools" "platforms;android-30" "build-tools;30.0.3"
 
-      - name: Set up Android SDK
-        run: |
-          mkdir -p $HOME/.android/cmdline-tools
-          cd $HOME/.android/cmdline-tools
-          curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip tools.zip -d tools
-          export PATH=$HOME/.android/cmdline-tools/tools/bin:$PATH
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
-        
-      - name: Set up Apache ANT manual
-        run: |
-          mkdir -p ~/.buildozer/android/platform
-          cp -r tools/apache-ant-1.9.4 ~/.buildozer/android/platform/apache-ant-1.9.4
-
-      - name: Build APK
-        run: |
-          buildozer android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: musik-spy-debug.apk
-          path: bin/*.apk
+    - name: Build APK
+      run: |
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+        buildozer android debug
