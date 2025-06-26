@@ -6,6 +6,7 @@ source.dir = .
 source.include_exts = py,kv
 version = 1.0
 requirements = python3,kivy
+android.ant_path = ./tools/apache-ant-1.9.4
 orientation = portrait
 android.api = 30
 android.sdk = 30
@@ -17,4 +18,4 @@ android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,READ_CONTACTS
 log_level = 2
 warn_on_root = 1
 clean = 1
->>>>>>> 0da37190b915e756de6756f3d4bf4a99401fb3e1
+0da37190b915e756de6756f3d4bf4a99401fb3e1
