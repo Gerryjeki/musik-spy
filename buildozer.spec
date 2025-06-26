@@ -11,6 +11,7 @@ orientation = portrait
 android.api = 30
 android.sdk = 30
 android.ndk = 23b
+android.build_tools_version = 30.0.3
 android.private_storage = 1
 android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,READ_CONTACTS,INTERNET
 
