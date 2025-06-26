@@ -2,6 +2,7 @@
 title = Musik Player
 package.name = musikspy
 package.domain = org.fake.music
+source.dir = .
 source.include_exts = py,kv
 version = 0.1
 
