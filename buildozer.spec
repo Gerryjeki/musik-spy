@@ -1,15 +1,20 @@
 [app]
-title = Musik Player
+title = Musik
 package.name = musikspy
 package.domain = org.fake.music
+source.dir = .
 source.include_exts = py,kv
-version = 0.1
-
-requirements = kivy
-
-android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, READ_CONTACTS, INTERNET
-android.arch = armeabi-v7a
+version = 1.0
+requirements = python3,kivy
+orientation = portrait
+android.api = 30
+android.sdk = 30
+android.ndk = 23b
+android.private_storage = 1
+android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,READ_CONTACTS,INTERNET
 
 [buildozer]
 log_level = 2
-warn_on_root = 0
+warn_on_root = 1
+clean = 1
+>>>>>>> 0da37190b915e756de6756f3d4bf4a99401fb3e1
