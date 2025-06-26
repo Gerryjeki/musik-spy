@@ -1,5 +1,4 @@
-name: Build APK Musik Spy
-
+name: Build APK Musik Spy 
 on:
   push:
     branches:
