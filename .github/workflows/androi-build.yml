@@ -19,11 +19,12 @@ jobs:
         pip install --upgrade pip
         pip install cython buildozer==1.5.0
 
-    - name: Install Android SDK packages
+    - name: Set ANDROID_HOME and install SDK tools
       run: |
         export ANDROID_HOME=/home/runner/android-sdk
-        /home/runner/android-sdk/tools/bin/sdkmanager "platform-tools" "build-tools;30.0.3"
-        
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        sdkmanager --sdk_root=${ANDROID_HOME} "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+    
     - name: Build APK
       run: |
         export ANDROID_HOME=$HOME/android-sdk
