@@ -1,4 +1,5 @@
 name: Build APK Musik Spy
+
 on:
   push:
     branches:
@@ -19,14 +20,35 @@ jobs:
         pip install --upgrade pip
         pip install cython buildozer==1.5.0
 
-    - name: Set ANDROID_HOME and install SDK tools
+    - name: Download and Install Android SDK
       run: |
-        export ANDROID_HOME=/home/runner/android-sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-        sdkmanager --sdk_root=${ANDROID_HOME} "platform-tools" "build-tools;30.0.3" "platforms;android-30"
-    
-    - name: Build APK
-      run: |
+        mkdir -p $HOME/android-sdk/cmdline-tools
+        cd $HOME/android-sdk/cmdline-tools
+        curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip sdk-tools.zip -d latest
         export ANDROID_HOME=$HOME/android-sdk
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+
+    - name: Accept SDK Licenses
+      run: |
+        yes | sdkmanager --licenses
+        sdkmanager --update
+
+    - name: Install SDK Components
+      run: |
+        sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+
+    - name: Set ENV for Buildozer
+      run: |
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
+
+    - name: Build APK
+      run: |
         buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: musik-spy.apk
+        path: bin/*.apk
